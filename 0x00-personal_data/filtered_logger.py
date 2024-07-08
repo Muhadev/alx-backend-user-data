@@ -94,3 +94,24 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         host=host,
         database=database
     )
+
+
+def main() -> None:
+    """
+    Main function that retrieves all rows from the 'users' table and logs each row.
+    """
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users;")
+    logger = get_logger()
+
+    for row in cursor:
+        row_str = "; ".join([f"{key}={value}" for key, value in row.items()])
+        logger.info(row_str)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
