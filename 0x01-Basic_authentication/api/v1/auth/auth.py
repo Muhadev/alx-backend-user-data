@@ -16,7 +16,21 @@ class Auth():
         requires authentication.
         Currently, it just returns False.
         """
-        return False
+        if path is None:
+            return True
+        if not excluded_paths or excluded_paths is None:
+            return True
+        
+        # Ensure path has a trailing slash
+        if path[-1] != '/':
+            path += '/'
+        
+        for excluded_path in excluded_paths:
+            if excluded_path.endswith('/'):
+                if path == excluded_path:
+                    return False
+        
+        return True
 
     def authorization_header(self, request=None) -> str:
         """
