@@ -108,3 +108,23 @@ class BasicAuth(Auth):
         if user_email is None or user_pwd is None:
             return None
         return self.user_object_from_credentials(user_email, user_pwd)
+
+    def extract_user_credentials(self,
+        decoded_base64_authorization_header: str
+    ) -> (str, str):
+        """
+        Returns the user email and password from
+        the Base64 decoded value.
+        """
+        if not decoded_base64_authorization_header or \
+            not isinstance(decoded_base64_authorization_header, str) or \
+            ':' not in decoded_base64_authorization_header:
+            return None, None
+
+    
+        # Split only the first occurrence of ':' to handle passwords with ':'
+        split_index = decoded_base64_authorization_header.index(':')
+        user_email = decoded_base64_authorization_header[:split_index]
+        user_pwd = decoded_base64_authorization_header[split_index + 1:]
+
+        return user_email, user_pwd
