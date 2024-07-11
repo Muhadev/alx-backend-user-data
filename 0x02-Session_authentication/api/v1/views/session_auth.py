@@ -7,7 +7,6 @@ from os import getenv
 from models.user import User
 from typing import TypeVar, List
 
-
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login():
     """ Auth session Login
@@ -20,18 +19,20 @@ def login():
     if not email:
         return make_response(jsonify({"error": "email missing"}), 400)
 
-    passwd = request.form.get('password')
-    if not passwd:
+    password = request.form.get('password')
+    if not password:
         return make_response(jsonify({"error": "password missing"}), 400)
 
-    exist_user = User.search({"email": email})
+    # Retrieve user based on email
+    existing_users = User.search({"email": email})
 
-    if len(exist_user) == 0:
+    if not existing_users:
         return jsonify({"error": "no user found for this email"}), 404
 
+    # Check password validity for each user found
     from api.v1.app import auth
-    for user in exist_user:
-        if (user.is_valid_password(passwd)):
+    for user in existing_users:
+        if user.is_valid_password(password):
             session_id = auth.create_session(user.id)
             SESSION_NAME = getenv('SESSION_NAME')
             response = make_response(user.to_json())
@@ -39,20 +40,3 @@ def login():
             return response
 
     return make_response(jsonify({"error": "wrong password"}), 401)
-
-
-@app_views.route('/auth_session/logout',
-                 methods=['DELETE'], strict_slashes=False)
-def logout():
-    """ Logout of the session
-
-        Return:
-            Logout session
-    """
-    from api.v1.app import auth
-    isdestroy = auth.destroy_session(request)
-
-    if isdestroy is False:
-        abort(404)
-
-    return jsonify({}), 200
