@@ -2,10 +2,10 @@
 """ Module of Users views
 """
 from api.v1.views import app_views
-from flask import abort, jsonify, request, make_response
+from flask import jsonify, request, make_response
 from os import getenv
 from models.user import User
-from typing import TypeVar, List
+
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login():
