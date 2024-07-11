@@ -8,9 +8,6 @@ from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
 from typing import List, TypeVar
-from api.v1.auth.session_auth import SessionAuth
-from api.v1.auth.session_exp_auth import SessionExpAuth
-from api.v1.auth.session_db_auth import SessionDBAuth
 
 
 app = Flask(__name__)
@@ -83,7 +80,7 @@ def before_request() -> str:
         '/api/v1/status',
         '/api/v1/unauthorized/',
         '/api/v1/forbidden/',
-        '/api/v1/auth_session/login'
+        '/api/v1/auth_session/login/'
         ]
     if not auth.require_auth(request.path, excluded_paths):
         return
