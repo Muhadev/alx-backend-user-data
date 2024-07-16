@@ -83,3 +83,8 @@ class Auth:
             )
         except NoResultFound:
             return False
+
+        except Exception as e:
+            # Handle any unexpected errors gracefully
+            print(f"Error during login validation: {str(e)}")
+            return False
