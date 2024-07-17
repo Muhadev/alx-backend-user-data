@@ -115,7 +115,7 @@ def update_password():
         abort(400, description="Missing required parameters")
 
     try:
-        auth.update_password(reset_token, new_password)
+        AUTH.update_password(reset_token, new_password)
     except ValueError:
         abort(403, description="Invalid reset token")
 
