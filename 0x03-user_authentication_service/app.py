@@ -93,16 +93,16 @@ def profile():
 def get_reset_password_token():
     """Handle the POST /reset_password route to generate
     a reset password token."""
-    if not request.form or 'email' not in request.form:
-        abort(403)
-
-    email = request.form['email']
-
+    email = request.form.get("email")
+    reset_token = None
     try:
-        reset_token = auth.get_reset_password_token(email)
-        return jsonify({"email": email, "reset_token": reset_token}), 200
+        reset_token = AUTH.get_reset_password_token(email)
     except ValueError:
+        reset_token = None
+    if reset_token is None:
         abort(403)
+    return jsonify({"email": email, "reset_token": reset_token})
+
 
 
 if __name__ == "__main__":
