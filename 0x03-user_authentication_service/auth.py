@@ -150,7 +150,7 @@ class Auth:
         except NoResultFound:
             user = None
         if user is None:
-            raise ValueError(f"User {email} does not exist.")
+            raise ValueError()
 
         reset_token = _generate_uuid()
 
