@@ -151,10 +151,7 @@ class Auth:
             user = None
         if user is None:
             raise ValueError()
-
         reset_token = _generate_uuid()
-
         # Update user's reset_token in database
         self._db.update_user(user, reset_token=reset_token)
-
         return reset_token
