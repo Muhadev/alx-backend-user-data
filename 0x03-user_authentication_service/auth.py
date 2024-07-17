@@ -140,3 +140,18 @@ class Auth:
             user_id (int): The ID of the user whose session will be destroyed.
         """
         self._db.update_user(user_id, session_id=None)
+
+    def get_reset_password_token(self, email: str) -> str:
+        """Generate and retrieve a reset password token for a user."""
+        user = self._db.find_user_by(email=email)
+
+        if not user:
+            raise ValueError(f"User {email} does not exist.")
+
+        # Generate a new UUID for reset token
+        reset_token = str(uuid.uuid4())
+
+        # Update user's reset_token in database
+        self._db.update_user(user, reset_token=reset_token)
+
+        return reset_token
