@@ -2,7 +2,7 @@
 """
 entry point module
 """
-from flask import Flask, jsonify, request, abort
+from flask import Flask, request, jsonify, redirect, make_response, abort
 from auth import Auth
 
 # Create a Flask application
