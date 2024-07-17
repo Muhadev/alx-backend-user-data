@@ -144,7 +144,7 @@ class Auth:
     def get_reset_password_token(self, email: str) -> str:
         """Generate and retrieve a reset password token for a user."""
         user = self._db.find_user_by(email=email)
-        
+
         if not user:
             raise ValueError(f"User {email} does not exist.")
 
