@@ -144,12 +144,12 @@ class Auth:
     def get_reset_password_token(self, email: str) -> str:
         """Generate and retrieve a reset password token for a user."""
         user = self._db.find_user_by(email=email)
-
+        
         if not user:
             raise ValueError(f"User {email} does not exist.")
 
         # Generate a new UUID for reset token
-        reset_token = str(uuid.uuid4())
+        reset_token = _generate_uuid()
 
         # Update user's reset_token in database
         self._db.update_user(user, reset_token=reset_token)
