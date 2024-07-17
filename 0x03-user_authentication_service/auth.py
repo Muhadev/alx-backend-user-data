@@ -3,6 +3,7 @@
 auth module
 """
 import bcrypt
+from typing import Optional
 import uuid
 from db import DB
 from user import User
@@ -111,5 +112,23 @@ class Auth:
             session_id = _generate_uuid()
             self._db.update_user(user.id, session_id=session_id)
             return session_id
+        except NoResultFound:
+            return None
+
+    def get_user_from_session_id(self, session_id: str) -> Optional[User]:
+        """Get user based on session ID.
+
+        Args:
+            session_id (str): The session ID to look up the user.
+
+        Returns:
+            Optional[User]: The corresponding User object
+            if found, else None.
+        """
+        if session_id is None:
+            return None
+
+        try:
+            return self._db.find_user_by(session_id=session_id)
         except NoResultFound:
             return None
